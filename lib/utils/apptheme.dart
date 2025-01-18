@@ -4,7 +4,8 @@ import 'package:newsapp/utils/colors.dart';
 
 class Apptheme {
   static final ThemeData darkTheme = ThemeData(
-      primaryColor: AppColor.white,
+    indicatorColor: AppColor.white,
+      primaryColor: AppColor.black,
       scaffoldBackgroundColor: AppColor.black,
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: AppColor.black,
@@ -26,7 +27,8 @@ class Apptheme {
       ));
 
   static final ThemeData lightTheme = ThemeData(
-      primaryColor: AppColor.black,
+      indicatorColor: AppColor.black,
+      primaryColor: AppColor.white,
       drawerTheme: DrawerThemeData(backgroundColor: AppColor.black),
             bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: AppColor.white,

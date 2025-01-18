@@ -32,7 +32,7 @@ class LanguageBottomSheet extends StatelessWidget {
                     )),
           Divider(
             thickness: 1.2,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).indicatorColor,
           ),
           InkWell(
               onTap: () {
@@ -59,7 +59,7 @@ class LanguageBottomSheet extends StatelessWidget {
         ),
         Icon(
           Icons.check,
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).indicatorColor,
         )
       ],
     );

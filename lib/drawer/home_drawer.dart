@@ -11,7 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({super.key});
+  void Function()? onTap;
+  HomeDrawer({super.key,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,10 @@ class HomeDrawer extends StatelessWidget {
         SizedBox(
           height: screenSize.height * 0.02,
         ),
-        DrawerItemSection(imagePath: ImageAssets.homeimage, text: "Go To Home"),
+        InkWell(
+            onTap: onTap,
+            child: DrawerItemSection(
+                imagePath: ImageAssets.homeimage, text: "Go To Home")),
         SizedBox(
           height: screenSize.height * 0.02,
         ),

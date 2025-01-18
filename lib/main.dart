@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/category/category_details.dart';
-import 'package:newsapp/general_screen.dart';
+import 'package:newsapp/home_screen.dart';
 import 'package:newsapp/providers/apptheme_provider.dart';
 import 'package:newsapp/providers/language_provider.dart';
 import 'package:newsapp/utils/apptheme.dart';
-import 'package:newsapp/home_screen.dart';
 import 'package:newsapp/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,9 +40,7 @@ class MyApp extends StatelessWidget {
         locale: Locale(languageProvider.appLanguage),
         routes: {
           HomeScreen.routename: (context) => const HomeScreen(),
-          GeneralScreen.routename: (context) => const GeneralScreen(),
-          CategoryDetails.routename: (context) => const CategoryDetails(),
         },
-        initialRoute: GeneralScreen.routename);
+        initialRoute: HomeScreen.routename);
   }
 }
