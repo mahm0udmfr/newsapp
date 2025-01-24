@@ -18,7 +18,7 @@ class ApiManager {
       return SourceResponce.fromJson(jsonDecode(response.body));
     } catch (e) {
       // ignore: use_rethrow_when_possible
-      throw e;
+    return null;
     }
   }
 

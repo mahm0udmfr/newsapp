@@ -1,79 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/category/category_details_view_model.dart';
 import 'package:newsapp/category/source_tab_widget.dart';
 import 'package:newsapp/model/category_model.dart';
-import 'package:newsapp/model/source_response.dart';
-import 'package:newsapp/utils/api_manager.dart';
 import 'package:newsapp/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class CategoryDetails extends StatefulWidget {
-   CategoryModel category;
-   CategoryDetails({super.key, required this.category});
+  final CategoryModel category;
+  const CategoryDetails({super.key, required this.category});
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
+  late CategoryDetailsViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = CategoryDetailsViewModel();
+    viewModel.getSources(widget.category.id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponce?>(
-      future: ApiManager.getSources(widget.category.id),
-      builder: (context, snapshot) {
-        //todo: Loading
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColor.grey,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              children: [
-                Text(
-                  "Somethig Went Wrong",
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                ElevatedButton(
+    return ChangeNotifierProvider(
+      create: (context) => viewModel,
+      child: Consumer<CategoryDetailsViewModel>(
+        builder: (context, viewModel, child) {
+          if (viewModel.errorMessage != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    viewModel.errorMessage!,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  ElevatedButton(
                     onPressed: () {
-                      ApiManager.getSources(widget.category.id);
-                      setState(() {});
+                      viewModel.getSources(widget.category.id);
                     },
-                    child: Text("Try Again")),
-              ],
-            ),
-          );
-        }
-
-        ///todo: server error
-        if (snapshot.data!.status != 'ok') {
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColor.grey,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              children: [
-                Text(
-                  snapshot.data!.message!,
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      ApiManager.getSources(widget.category.id);
-                      setState(() {});
-                    },
-                    child: Text("Try Again")),
-              ],
-            ),
-          );
-        }
-//server success
-        var sourcesList = snapshot.data!.sources!;
-        return SourceTabWidget(sourcesList: sourcesList);
-      },
+                    child: const Text("Try Again"),
+                  ),
+                ],
+              ),
+            );
+          } else if (viewModel.sourcesList == null) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.grey,
+              ),
+            );
+          } else {
+            return SourceTabWidget();
+          }
+        },
+      ),
     );
   }
 }

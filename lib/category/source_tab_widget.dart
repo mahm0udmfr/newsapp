@@ -1,44 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/category/category_details_view_model.dart';
 import 'package:newsapp/category/source_name_item.dart';
-import 'package:newsapp/model/source_response.dart';
 import 'package:newsapp/news/news_widget.dart';
 import 'package:newsapp/utils/colors.dart';
+import 'package:provider/provider.dart';
 
-class SourceTabWidget extends StatefulWidget {
-  List<Sources> sourcesList;
-
-  SourceTabWidget({super.key, required this.sourcesList});
-
-  @override
-  State<SourceTabWidget> createState() => _SourceTabWidgetState();
-}
-
-class _SourceTabWidgetState extends State<SourceTabWidget> {
-  int selectedIndex = 0;
+class SourceTabWidget extends StatelessWidget {
+  const SourceTabWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CategoryDetailsViewModel>(context);
+    
+
     return DefaultTabController(
-      length: widget.sourcesList.length,
+      length: viewModel.sourcesList?.length ?? 0,
       child: Column(
         children: [
           TabBar(
-              onTap: (value) {
-                selectedIndex = value;
-                setState(() {});
-              },
-              tabAlignment: TabAlignment.start,
-              dividerColor: AppColor.transparent,
-              isScrollable: true,
-              tabs: widget.sourcesList.map((source) {
-                return SourceNameItem(
-                    sources: source,
-                    isSelected:
-                        selectedIndex == widget.sourcesList.indexOf(source));
-              }).toList()),
-          Expanded(child: NewsWidget(source: widget.sourcesList[selectedIndex]))
+            onTap: (value) {
+              viewModel.changeIndex(value);
+            },
+            tabAlignment: TabAlignment.start,
+            dividerColor: AppColor.transparent,
+            isScrollable: true,
+            tabs: viewModel.sourcesList!.map((source) {
+              return SourceNameItem(
+                sources: source,
+                isSelected: viewModel.selectedIndex ==
+                    viewModel.sourcesList!.indexOf(source),
+              );
+            }).toList(),
+          ),
+       Expanded(
+            child: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: viewModel.sourcesList!.map((source) {
+                return NewsWidget(source: source);
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
