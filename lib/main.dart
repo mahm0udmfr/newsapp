@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/home_screen.dart';
 import 'package:newsapp/providers/apptheme_provider.dart';
 import 'package:newsapp/providers/language_provider.dart';
 import 'package:newsapp/utils/apptheme.dart';
 import 'package:newsapp/services.dart';
+import 'package:newsapp/utils/my_bloc_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = MyBlocObserver();
   await MyServices.init();
   runApp(MultiProvider(
     providers: [
